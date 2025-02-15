@@ -3,16 +3,16 @@ const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 
 const birdImg = new Image();
-birdImg.src = "danfe.png";
+birdImg.src = "assets/danfe.png";
 
 // birdImg.onload = function() {
 //     alert(this.width + 'x' + this.height);
 //   }
 
 const pipeTopImg = new Image();
-pipeTopImg.src = 'dhar.png';
+pipeTopImg.src = 'assets/dhar.png';
 const pipeBottomImg = new Image();
-pipeBottomImg.src = 'dhar.png';
+pipeBottomImg.src = 'assets/dhar.png';
 
 // Game state
 const gameState = {
@@ -79,6 +79,11 @@ function update() {
         if (!pipe.passed && pipe.x + gameState.pipeWidth < gameState.bird.x) {
             gameState.score++;
             scoreElement.textContent = `Score: ${gameState.score}`;
+             // Trigger flash animation
+            scoreElement.classList.add('score-flash');
+            scoreElement.addEventListener('animationend', () => {
+                scoreElement.classList.remove('score-flash');
+            }, { once: true });
             pipe.passed = true;
         }
 
@@ -226,6 +231,8 @@ function draw() {
     if (gameState.gameOver) {
         ctx.fillStyle = 'Cyan';
         ctx.font = '20px Arial';
+        ctx.shadowColor = "black";
+        ctx.shadowBlur = 10;
         ctx.fillText('Game Over! Click to restart', 50, canvas.height/2);
     }
 }
